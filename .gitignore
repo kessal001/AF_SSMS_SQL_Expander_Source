@@ -1,0 +1,11 @@
+.vs/
+.vscode/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.cache
+*.log
+*.vsix
+packages/
+TestResults/

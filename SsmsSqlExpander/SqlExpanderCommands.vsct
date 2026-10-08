@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="guidAfSqlExpanderPackage">
+    <Groups>
+      <Group guid="guidAfSqlExpanderCmdSet" id="ToolsGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidAfSqlExpanderCmdSet" id="cmdidOpenSnippets" priority="0x0100" type="Button">
+        <Parent guid="guidAfSqlExpanderCmdSet" id="ToolsGroup" />
+        <CommandFlag>TextOnly</CommandFlag>
+        <Strings>
+          <ButtonText>SSMS SQL Expander - Edit Snippets</ButtonText>
+          <CommandName>SSMS.SQLExpander.OpenSnippets</CommandName>
+          <ToolTipText>Open the SSMS SQL Expander snippets.json file</ToolTipText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <CommandPlacements>
+    <!-- Also expose the command in the standard toolbar area used by SSMS/VS shell. -->
+    <CommandPlacement guid="guidAfSqlExpanderCmdSet" id="cmdidOpenSnippets" priority="0x0900">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_TOOLSB_WINDOWS" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="guidAfSqlExpanderPackage" value="{7B0A2D38-450E-4E50-AF9B-9D944F36CBE2}" />
+    <GuidSymbol name="guidAfSqlExpanderCmdSet" value="{F8109F3C-12B3-4694-A2CC-3B90E8AE705D}">
+      <IDSymbol name="ToolsGroup" value="0x1020" />
+      <IDSymbol name="cmdidOpenSnippets" value="0x0100" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

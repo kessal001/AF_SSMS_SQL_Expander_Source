@@ -1,0 +1,10 @@
+{
+  "isna": "ISNULL(annullato,'')<>'S'",
+  "dropt": "DROP TABLE IF EXISTS $cursor$",
+  "sel": "SELECT * FROM ",
+  "selt": "SELECT TOP 100 * FROM ",
+  "oggi": "CAST(GETDATE() AS date)",
+  "monday": "IF DATEDIFF(DAY, '19000101', CURRENT_TIMESTAMP) % 7 + 1 = 1 -- Monday=1\nBEGIN\n    $cursor$\nEND",
+  "join": "INNER JOIN $1 $2 ON $2.$3 = $4.$3$0",
+  "tryc": "BEGIN TRY\n    $1\nEND TRY\nBEGIN CATCH\n    THROW;\nEND CATCH\n$0"
+}
