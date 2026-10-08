@@ -1,167 +1,117 @@
 # SSMS SQL Expander
 
-**SSMS SQL Expander** is a lightweight productivity extension for SQL Server Management Studio 22.
+[![Build VSIX](https://github.com/kessal001/AF_SSMS_SQL_Expander_Source/actions/workflows/build.yml/badge.svg)](https://github.com/kessal001/AF_SSMS_SQL_Expander_Source/actions/workflows/build.yml)
 
-Type a short abbreviation, press `TAB`, and expand it into deterministic T-SQL. It is designed for the small pieces of SQL you type repeatedly and want to expand the same way every time.
+A lightweight extension that expands abbreviations into deterministic T-SQL with `TAB`.
+It supports numbered placeholders, repeated values and multi-line indentation.
+No background process, AI service, network connection or database access is required.
 
-No background process, no AI service, no network access and no database access are required by the extension itself.
-
-## Example
-
-With this configuration:
+## Quick example
 
 ```json
 {
   "sel": "SELECT * FROM ",
-  "dropt": "DROP TABLE IF EXISTS $cursor$"
-}
-```
-
-Typing:
-
-```text
-sel<TAB>
-```
-
-produces:
-
-```sql
-SELECT * FROM 
-```
-
-## Sequential tab stops
-
-Use `$1`, `$2`, `$3`, ... for editable positions and `$0` for the final cursor position.
-
-```json
-{
   "join": "INNER JOIN $1 $2 ON $2.$3 = $4.$3$0"
 }
 ```
 
-After `join + TAB`, the editor selects `$1`. Each following `TAB` moves to the next placeholder.
+Type `sel` and press `TAB` to insert `SELECT * FROM `. With `join`, replace the
+selected `$1`, then press `TAB` to visit `$2`, `$3` and `$4`. Repeated values are
+synchronized when leaving their primary placeholder. `$0` is the final caret
+position; `$cursor$` is an alias. Use one final-position marker per snippet.
 
-Repeated placeholders are synchronized when you leave that placeholder with `TAB`. For example, entering `a` in `$2` replaces every `$2` occurrence with `a`.
+## Requirements and compatibility
 
-`$cursor$` is supported as an alias for the final cursor position.
+- Windows and .NET Framework 4.8.
+- The current manifest targets **SSMS 22.6 or later**, x64 and ARM64.
+- For building: Visual Studio / Build Tools with MSBuild, Visual Studio extension
+  development tooling and the .NET Framework 4.8 targeting pack.
 
-## Multi-line snippets and indentation
-
-Multi-line expansions inherit the indentation of the current SQL line.
-
-Example:
-
-```json
-{
-  "tryc": "BEGIN TRY\n    $1\nEND TRY\nBEGIN CATCH\n    THROW;\nEND CATCH\n$0"
-}
-```
-
-## Configuration
-
-The active configuration is stored at:
-
-```text
-%LOCALAPPDATA%\SsmsSqlExpander\snippets.json
-```
-
-If version 0.1/0.2 created the old configuration under:
-
-```text
-%LOCALAPPDATA%\AF-Sviluppo\SsmsSqlExpander\snippets.json
-```
-
-version 0.3 automatically copies it to the new public path the first time it runs.
-
-The configuration is reloaded automatically when the JSON file changes. Restarting SSMS is not required.
-
-## Edit Snippets command
-
-The extension registers:
-
-```text
-Tools > SSMS SQL Expander - Edit Snippets
-```
-
-and also exposes the same command through the SSMS/Visual Studio shell toolbar command placement.
-
-The command opens the active `snippets.json` file with the Windows-associated JSON editor.
-
-## Sample snippets
-
-See:
-
-- `snippets.example.json` for generic public examples;
-- `snippets.personal.example.json` for a practical starter set.
-
-Example day-of-week snippet that does not depend on `SET DATEFIRST`:
-
-```json
-{
-  "monday": "IF DATEDIFF(DAY, '19000101', CURRENT_TIMESTAMP) % 7 + 1 = 1 -- Monday=1\nBEGIN\n    $cursor$\nEND"
-}
-```
+The manifest expresses install targets; runtime compatibility must be tested on
+individual SSMS versions and architectures. Microsoft states that
+[third-party SSMS extensions are not supported](https://learn.microsoft.com/en-us/ssms/faq).
+Use the [manual checklist](docs/TEST_CHECKLIST.md) before distributing a tested release.
 
 ## Build
 
-Requirements on Windows:
-
-- Visual Studio / Build Tools with MSBuild;
-- **Visual Studio extension development** workload;
-- .NET Framework 4.8 targeting support.
-
-Build from PowerShell:
+From the repository root in PowerShell:
 
 ```powershell
 .\Build.ps1
 ```
 
-or open `SSMS_SQL_Expander.sln` and build `Release`.
+The script finds MSBuild (including a fallback to Visual Studio Insiders), validates
+the repository, builds the active solution and validates the VSIX package. The
+ready-to-install output is:
 
-> The source package can be prepared and statically checked outside Windows, but the VSIX must be built and tested on Windows with the Visual Studio extension toolchain.
+```text
+artifacts/SsmsSqlExpander.vsix
+```
 
-## Install
+Alternatively open `SSMS_SQL_Expander.sln` in Visual Studio. Advanced builds can use
+`-Configuration Debug` or `-MsBuildPath 'C:\path\to\MSBuild.exe'`.
+GitHub Actions builds the same solution and provides a downloadable VSIX artifact
+under [Actions](https://github.com/kessal001/AF_SSMS_SQL_Expander_Source/actions).
 
-Close SSMS, then run:
+## Install or uninstall
+
+Close all SSMS instances, then run:
 
 ```powershell
 .\Install.ps1
-```
-
-The script expects the SSMS 22 VSIX installer at:
-
-```text
-C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\VSIXInstaller.exe
-```
-
-## Uninstall
-
-Close SSMS and run:
-
-```powershell
+# Later, to remove the extension:
 .\Uninstall.ps1
 ```
 
-## Error log
+Both scripts discover the installed compatible SSMS through `vswhere` and wait for
+the VSIX installer result. Use `-InstallerPath 'C:\path\to\VSIXInstaller.exe'` for
+custom installations, or `-WhatIf` to preview the operation. Installation defaults
+to the validated package in `artifacts/`; `-VsixPath` accepts another package with
+the current extension identity and version.
 
-Only extension errors are logged, at:
+## Configuration
+
+The active JSON file is stored at:
 
 ```text
-%LOCALAPPDATA%\SsmsSqlExpander\errors.log
+%LOCALAPPDATA%\SsmsSqlExpander\snippets.json
 ```
 
-## Design goals
+Open it using **Tools > SSMS SQL Expander - Edit Snippets**. The command uses the
+Windows-associated JSON editor. Changes reload on the next snippet lookup without
+restarting SSMS; invalid JSON retains the last valid configuration.
 
-- deterministic expansion rather than probabilistic completion;
-- zero resident process outside SSMS;
-- local, human-editable configuration;
-- minimal interference with normal `TAB` behavior;
-- small codebase that can be adapted if future SSMS releases change the extension shell.
+On first use, an existing configuration from
+`%LOCALAPPDATA%\AF-Sviluppo\SsmsSqlExpander\snippets.json` is copied if the new file
+does not exist. Migration preserves existing abbreviation names. Default and
+sample configurations use `isna`; older files with `insa` must be edited if you want
+the new spelling.
 
-## Compatibility note
+Start from [generic examples](examples/snippets.example.json) or the
+[practical starter set](examples/snippets.personal.example.json). Multi-line snippets
+use JSON `\n` escapes and inherit the current line's indentation. Errors are logged
+locally at `%LOCALAPPDATA%\SsmsSqlExpander\errors.log`.
 
-SSMS does not guarantee compatibility for third-party extensions across all releases. This project deliberately keeps the integration surface small: an editor command filter plus a lightweight package/menu command.
+## Repository layout
+
+```text
+src/SsmsSqlExpander/       Active VSIX project
+  Editor/                 SQL view integration and placeholder sessions
+  Configuration/          JSON storage, migration and diagnostics
+  Commands/               Edit Snippets command
+docs/                     Architecture, host test checklist and roadmap
+examples/                 Generic snippet configurations
+scripts/                  Validation and SSMS installer discovery
+archive/v0.1/             Previous source, excluded from the active build
+.github/                  Windows build workflow and issue template
+artifacts/                Local generated VSIX (ignored by Git)
+```
+
+Read the [architecture and analysis](docs/ARCHITECTURE.md),
+[contributing guide](CONTRIBUTING.md), [changelog](CHANGELOG.md) and
+[roadmap](docs/ROADMAP.md). The historical project shares the current VSIX identity;
+build and install only the active project.
 
 ## License
 
-MIT License. Copyright (c) 2026 Alessandro Frà.
+[MIT](LICENSE). Copyright (c) 2026 Alessandro Frà.

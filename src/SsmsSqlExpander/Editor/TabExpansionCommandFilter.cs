@@ -24,12 +24,14 @@ namespace SsmsSqlExpander
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             return _next?.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText)
-                   ?? VSConstants.OLECMDERR_E_NOTSUPPORTED;
+                   ?? (int)Constants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             if (pguidCmdGroup == VSConstants.VSStd2K &&
                 nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB)
             {
@@ -51,7 +53,7 @@ namespace SsmsSqlExpander
             }
 
             return _next?.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
-                   ?? VSConstants.OLECMDERR_E_NOTSUPPORTED;
+                   ?? (int)Constants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         private bool TryExpandSnippet()

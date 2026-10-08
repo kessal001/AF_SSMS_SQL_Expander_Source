@@ -5,7 +5,7 @@ Questa chat/progetto è dedicata allo sviluppo di **SSMS SQL Expander**, una pic
 Il repository/sorgente di riferimento sul mio PC è:
 
 ```text
-AF_SSMS_SQL_Expander_Source/
+AF_SSMS_SQL_Expander_Source/ (sorgenti attivi: src/SsmsSqlExpander/)
 ```
 
 Prima di proporre o applicare modifiche importanti, considera **i file presenti in questa cartella come source of truth** e verifica sempre il codice corrente. Non ricostruire il progetto da zero se esiste già una versione funzionante.

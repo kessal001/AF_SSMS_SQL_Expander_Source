@@ -22,8 +22,9 @@
 
 ## Distribution
 
-- Create a GitHub repository.
+- [x] Create a GitHub repository.
 - Add a simple extension icon.
 - Add an animated GIF showing `join + TAB` and placeholder navigation.
-- Automate VSIX build/release with GitHub Actions if a suitable Windows build environment is available.
+- [x] Automate VSIX builds and artifact upload with GitHub Actions.
+- Add a tested release workflow after manual SSMS compatibility validation.
 - Investigate publication/distribution options for SSMS extensions.

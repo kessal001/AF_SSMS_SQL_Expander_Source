@@ -9,3 +9,7 @@
 *.vsix
 packages/
 TestResults/
+artifacts/
+.env
+.env.*
+!.env.example

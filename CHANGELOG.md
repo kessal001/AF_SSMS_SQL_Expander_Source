@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- Organized current sources under src/, documentation under docs/, and snippets under examples/.
+- Preserved the previous project in archive/v0.1/, outside the active solution.
+- Added repository/package validation, Windows CI, contribution guidelines and editor conventions.
+- Fixed MSBuild discovery for Visual Studio Insiders, the missing System.Design reference, and the COM error constant reference.
+- Added UI-thread guards before forwarding COM editor commands.
+- Corrected VSIX metadata element order to match the package schema.
+- Unified installation discovery with the current manifest requirement and added installer exit-code checks and -WhatIf.
+- Standardized local VSIX delivery at artifacts/SsmsSqlExpander.vsix.
+- Documented the missing legacy insa alias and runtime validation limits.
+
 ## 0.3.0 - 2026-09-30
 
 - Renamed the public-facing extension to **SSMS SQL Expander**.

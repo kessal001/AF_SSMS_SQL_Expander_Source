@@ -28,11 +28,12 @@
 
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\LICENSE">
+    <Content Include="..\..\LICENSE">
       <Link>LICENSE</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

@@ -1,6 +1,6 @@
 # Manual test checklist
 
-Use this list after every VSIX build on Windows/SSMS 22.
+Use this list after every VSIX build on Windows/SSMS 22.6 or later. Record the exact host version and architecture; build/package checks do not cover these runtime checks.
 
 ## Installation
 

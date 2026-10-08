@@ -9,8 +9,8 @@
               Publisher="Alessandro Frà" />
     <DisplayName>SSMS SQL Expander</DisplayName>
     <Description xml:space="preserve">Fast deterministic T-SQL abbreviation expansion with TAB, sequential tab stops and repeated placeholders for SQL Server Management Studio 22.</Description>
-    <Tags>SSMS;SQL Server;T-SQL;snippets;productivity;abbreviations;tab stops</Tags>
     <License>LICENSE</License>
+    <Tags>SSMS;SQL Server;T-SQL;snippets;productivity;abbreviations;tab stops</Tags>
   </Metadata>
 
   <Installation>

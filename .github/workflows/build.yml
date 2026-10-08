@@ -1,0 +1,31 @@
+name: Build VSIX
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and build
+        shell: pwsh
+        run: ./Build.ps1
+      - name: Upload validated VSIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: SsmsSqlExpander
+          path: artifacts/SsmsSqlExpander.vsix
+          if-no-files-found: error
+          retention-days: 14

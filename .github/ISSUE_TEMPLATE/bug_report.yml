@@ -1,0 +1,22 @@
+name: Bug report
+description: Report a reproducible build, installation or editor problem.
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Extension and SSMS versions
+      description: Include the SSMS architecture (x64 or ARM64).
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include expected and actual behavior. Use generic SQL without business data.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant errors
+      description: Redact usernames, paths, credentials and connection information before posting.
